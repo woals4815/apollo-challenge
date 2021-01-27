@@ -1,6 +1,7 @@
 import { gql, useMutation } from "@apollo/client";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import { isLoggedInVar } from "../apollo";
 import { FormError } from "../components/form-error";
 import { loginMutation, loginMutationVariables } from "../__generated__/loginMutation";
@@ -51,9 +52,9 @@ export const Login = () => {
     }
   }
   return (
-    <div>
-      <div>
-        <form onSubmit={handleSubmit(onSubmit)}>
+    <div className="h-screen flex items-center flex-col mt-10 lg:mt-28">
+      <div className='w-full max-w-screen-sm flex flex-col px-5 items-center'>
+        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-3 mt-5 w-full mb-5">
           <input
             ref={register({ required: "email is required" })}
             name="email"
@@ -86,7 +87,13 @@ export const Login = () => {
             <FormError errorMessage={loginMutationResult.login.error} />
           )}
         </form>
+        <div>
+          Don't have an account?
+          <Link to='/create-account'>
+            Create Account
+          </Link>
+        </div>
       </div>
-    </div>
+      </div>
   );
 };
