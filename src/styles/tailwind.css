@@ -1,6 +1,6 @@
 @tailwind base;
 @tailwind components;
 .input {
-    @apply focus:outline-none focus:border-gray-500 p-3 border-2 text-lg border-gray-200 transition-colors
+    @apply focus:outline-none focus:border-blue-600 p-3 border-2 text-lg border-blue-200 transition-colors rounded-md
 }
 @tailwind utilities;

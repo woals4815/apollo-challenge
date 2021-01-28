@@ -3,6 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { isLoggedInVar } from "../apollo";
+import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
 import { loginMutation, loginMutationVariables } from "../__generated__/loginMutation";
 
@@ -23,7 +24,9 @@ interface ILoginForm {
 }
 
 export const Login = () => {
-  const { register, getValues, watch, errors, handleSubmit } = useForm<ILoginForm>();
+  const { register, getValues, watch, errors, handleSubmit, formState } = useForm<ILoginForm>({
+    mode: 'onChange'
+  });
   const onCompleted = (data: loginMutation) => {
     const {
       login: { ok, token}
@@ -52,7 +55,7 @@ export const Login = () => {
     }
   }
   return (
-    <div className="h-screen flex items-center flex-col mt-10 lg:mt-28">
+    <div className="h-screen flex items-center mx-3 flex-col mt-10 lg:mt-28">
       <div className='w-full max-w-screen-sm flex flex-col px-5 items-center'>
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-3 mt-5 w-full mb-5">
           <input
@@ -80,9 +83,11 @@ export const Login = () => {
           {errors.password?.type === "minLength" && (
             <FormError errorMessage="Password must be more than 10 chars." />
           )}
-          <button className="mt-3 btn">
-            {loading ? "Loading..." : "Log In"}
-          </button>
+          <Button 
+            canClick={formState.isValid}
+            loading={loading}
+            actionText={'Log In'}
+          />
           {loginMutationResult?.login.error && (
             <FormError errorMessage={loginMutationResult.login.error} />
           )}

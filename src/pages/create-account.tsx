@@ -56,9 +56,11 @@ export const CreateAccount = () => {
     }
   };
   return (
+  <div className="h-screen flex items-center mx-3 flex-col mt-10 lg:mt-28">
     <div className=" w-full max-w-screen-sm flex flex-col items-center">
       <form
         onSubmit = {handleSubmit(onSubmit)}
+        className="grid gap-3 mt-5 w-full mb-5"
       >
         <input 
           ref={register({
@@ -69,6 +71,7 @@ export const CreateAccount = () => {
           required
           type="email"
           placeholder="Email"
+          className='input'
         />
         {errors.email?.message &&(
           <FormError errorMessage= {errors.email?.message} />
@@ -84,6 +87,7 @@ export const CreateAccount = () => {
           name='password'
           type='password'
           placeholder="Password"
+          className='input'
         />{
           errors.password?.message &&(
             <FormError errorMessage = {errors.password.message} />
@@ -94,6 +98,7 @@ export const CreateAccount = () => {
           ref={register({
             required: true
           })}
+          className='justify-self-center text-lg my-5 text-blue-600'
         >
           {Object.keys(UserRole).map((role, index) => (
             <option key={index}>{role}</option>
@@ -109,12 +114,12 @@ export const CreateAccount = () => {
         )}
       </form>
       <div>
-        Already have an account?
+        Already have an account?{" "}
         <Link to="/">
           Login now
         </Link>
       </div>
     </div>
-
+    </div>
   )
 };
