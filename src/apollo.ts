@@ -1,9 +1,25 @@
-import { ApolloClient, InMemoryCache, makeVar } from "@apollo/client";
+import { ApolloClient, createHttpLink, InMemoryCache, makeVar } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 
-export const isLoggedInVar = makeVar(Boolean(localStorage.getItem('token')));
+const token = localStorage.getItem('token');
+export const isLoggedInVar = makeVar(Boolean(token));
+export const authTokenVar = makeVar(token);
+const httpLink = createHttpLink({
+  uri: "https://nuber-eats-challengee.herokuapp.com/graphql",
+});
+const authLink = setContext((_, { headers }) => {
+  return {
+    headers: {
+      ...headers,
+      "x-jwt": authTokenVar() || "",
+    },
+  };
+});
+
+
 
 export const client = new ApolloClient({
-  uri: "https://nuber-eats-challengee.herokuapp.com/graphql",
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
@@ -11,6 +27,11 @@ export const client = new ApolloClient({
           isLoggedIn: {
             read() {
               return isLoggedInVar();
+            }
+          },
+          token: {
+            read(){
+              return authTokenVar();
             }
           }
         }
