@@ -3,6 +3,7 @@ import {allPodcastsQuery} from '../__generated__/allPodcastsQuery';
 import React from 'react';
 import { Link } from "react-router-dom";
 import { Podcast } from "../components/podcast";
+import { StatusBar } from "../components/status-bar";
 
 const ALL_PODCASTS_QUERY = gql`
     query allPodcastsQuery{
@@ -31,7 +32,7 @@ export const Podcasts = () => {
         );
     }
     return (
-        <div>
+        <div className="flex flex-col justify-center items-center">
             {data.getAllPodcasts.podcasts?.map((podcast) => (
                 <Podcast 
                     id={podcast.id + ""}
@@ -40,6 +41,7 @@ export const Podcasts = () => {
                     createdAt={podcast.createdAt}
                 />
             ))}
+            <StatusBar />
         </div>
     )
 }

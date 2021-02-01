@@ -20,10 +20,10 @@ export const Podcast: React.FC<IPodcastProps> =({
         <div className='w-screen flex flex-col items-center'>
             <div className=' lg:max-w-screen-2xl w-4/5 bg-blue-300 flex flex-col my-3 h-80 rounded-md'>
                 <div className="flex justify-between mt-2  mx-4">
-                    <span className="text-red-400 text-xl">{title}</span>
-                    <span className="text-xs text-gray-400">{createdAt}</span>
+                    <span className="text-red-400 text-xl lg:text-7xl">{title}</span>
+                    <span className="text-xs text-gray-400 lg:text-xl">{createdAt}</span>
                 </div>
-                <div className="text-xs  mx-4 text-red-400">{category}</div>
+                <div className="text-xs  mx-4 text-red-400 lg:text-2xl">{category}</div>
                 <div className=" text-6xl flex justify-center mt-20 text-red-400">
                     <FontAwesomeIcon icon={faPlay} />
                 </div>
