@@ -67,44 +67,47 @@ export const Podcast = () => {
             }
         }
     });
-    const  [subscriptions, {data: subscriptionData}] = useLazyQuery<subscripiton>(SUBSCRIPTION);
-    const onClicked = () => {
-        subscribe({
+    const  {data: subscriptionData, refetch} = useQuery<subscripiton>(SUBSCRIPTION);
+    const onClicked = async() => {
+        await subscribe({
             variables: {
                 input: {
                     podcastId: +params.id
                 }
             }
         });
-        if(isSubscribe && subscriptionData){
-            setSubcribe(false)
-        }else{
-            setSubcribe(true)
-        }
-        subscriptions();
+        const result = await refetch();
+        console.log(result);
     };
+    if(!data || loading || error) {
+        return (
+            <div className="h-screen flex justify-center items-center">
+                <span className="font-medium text-xl tracking-wide">Loading...</span>
+            </div>
+        );
+    }
     return (
-        <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-center items-center">
                 <div className=" bg-gray-800 w-1/2 h-16 fixed rounded-lg top-0 flex justify-between items-center">
                     <span className="text-white ml-20 text-xl">{data?.getPodcast.podcast?.title}</span>
-                    <button onClick={onClicked}>    
-                        <span className={`text-white mr-4 ${isSubscribe ? "hidden" : ""}`}><FontAwesomeIcon icon={faPlus} /></span>
-                        <span className={`text-white mr-4 ${!isSubscribe ? "hidden" : ""}`}><FontAwesomeIcon icon={faCheck} /></span>
+                    <button className=" focus:outline-none" onClick={onClicked}>    
+                        <span className={`text-white mr-4 ${subscriptionData?.subscriptions.find(item => item.id === +params.id)? "hidden" : ""}`}><FontAwesomeIcon icon={faPlus} /></span>
+                        <span className={`text-white mr-4 ${subscriptionData?.subscriptions.find(subscription => subscription.id === +params.id)? "" : "hidden"}`}><FontAwesomeIcon icon={faCheck} /></span>
                     </button>
                 </div>
                 {data?.getPodcast.podcast?.episodes.map(episode => (
                     <div className='w-screen flex flex-col items-center justify-center mt-12'>
                         <div className=' lg:max-w-screen-2xl w-4/5 bg-blue-300 flex flex-col my-3 h-80 rounded-md'>
-                        <div className="flex justify-between mt-2  mx-4">
-                            <span className="text-red-400 text-xl lg:text-7xl">{episode.title}</span>
-                            <span className="text-xs text-gray-400 lg:text-xl">{episode.createdAt}</span>
-                        </div>
-                        <div className="text-xs  mx-4 text-red-400 lg:text-2xl">{episode.category}</div>
-                        <div className="flex justify-center text-gray-600 text-xl">
-                            <FontAwesomeIcon icon={faPlay} />
+                            <div className="flex justify-between mt-2  mx-4">
+                                <span className="text-red-400 text-xl lg:text-7xl">{episode.title}</span>
+                                <span className="text-xs text-gray-400 lg:text-xl">{episode.createdAt}</span>
+                            </div>
+                            <div className="text-xs  mx-4 text-red-400 lg:text-2xl">{episode.category}</div>
+                            <div className="flex justify-center items-center text-gray-600 text-xl">
+                                <FontAwesomeIcon icon={faPlay} />
+                            </div>
                         </div>
                     </div>
-                </div>
                 ))}
             <StatusBar />
         </div>
