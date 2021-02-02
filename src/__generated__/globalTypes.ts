@@ -27,6 +27,10 @@ export interface PodcastSearchInput {
   id: number;
 }
 
+export interface ToggleSubscribeInput {
+  podcastId: number;
+}
+
 //==============================================================
 // END Enums and Input Objects
 //==============================================================

@@ -1,10 +1,12 @@
-import { gql, useQuery } from '@apollo/client';
-import React from 'react';
+import { gql, useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import React, { useState } from 'react';
 import {getPodcast, getPodcastVariables} from '../__generated__/getPodcast';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faSubscript } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faPlay, faPlus, faSubscript } from '@fortawesome/free-solid-svg-icons';
 import { StatusBar } from '../components/status-bar';
+import {subscribe, subscribeVariables} from '../__generated__/subscribe';
+import {subscripiton} from '../__generated__/subscripiton';
 
 interface IPodcastParams {
     id: string;
@@ -31,7 +33,24 @@ const GET_EPISODES = gql`
     }
 `
 
+const SUBSCRIBE = gql`
+    mutation subscribe($input: ToggleSubscribeInput!){
+        toggleSubscribe(input: $input){
+            ok
+            error
+        }
+    }
+`;
+const SUBSCRIPTION = gql`
+    query subscripiton{
+        subscriptions{
+            id
+            title
+        }
+    }
+`;
 export const Podcast = () => {
+    let subData;
     const params = useParams<IPodcastParams>();
     const {data, loading, error} = useQuery<getPodcast, getPodcastVariables>(GET_EPISODES, {
         variables: {
@@ -40,11 +59,38 @@ export const Podcast = () => {
             }
         }
     });
+    const [isSubscribe, setSubcribe] = useState(false);
+    const [subscribe, {data: subscribeData, loading: subscribeLoading}] = useMutation<subscribe, subscribeVariables>(SUBSCRIBE, {
+        variables: {
+            input: {
+                podcastId: +params.id
+            }
+        }
+    });
+    const  [subscriptions, {data: subscriptionData}] = useLazyQuery<subscripiton>(SUBSCRIPTION);
+    const onClicked = () => {
+        subscribe({
+            variables: {
+                input: {
+                    podcastId: +params.id
+                }
+            }
+        });
+        if(isSubscribe && subscriptionData){
+            setSubcribe(false)
+        }else{
+            setSubcribe(true)
+        }
+        subscriptions();
+    };
     return (
         <div className="flex flex-col justify-center items-center">
                 <div className=" bg-gray-800 w-1/2 h-16 fixed rounded-lg top-0 flex justify-between items-center">
-                    <span className="text-white ml-20">{data?.getPodcast.podcast?.title}</span>
-                    <span className="text-white mr-4"><FontAwesomeIcon icon={faPlus} /></span>
+                    <span className="text-white ml-20 text-xl">{data?.getPodcast.podcast?.title}</span>
+                    <button onClick={onClicked}>    
+                        <span className={`text-white mr-4 ${isSubscribe ? "hidden" : ""}`}><FontAwesomeIcon icon={faPlus} /></span>
+                        <span className={`text-white mr-4 ${!isSubscribe ? "hidden" : ""}`}><FontAwesomeIcon icon={faCheck} /></span>
+                    </button>
                 </div>
                 {data?.getPodcast.podcast?.episodes.map(episode => (
                     <div className='w-screen flex flex-col items-center justify-center mt-12'>
@@ -54,8 +100,8 @@ export const Podcast = () => {
                             <span className="text-xs text-gray-400 lg:text-xl">{episode.createdAt}</span>
                         </div>
                         <div className="text-xs  mx-4 text-red-400 lg:text-2xl">{episode.category}</div>
-                        <div className="flex justify-center mt-56 text-gray-600 text-xl">
-                            <FontAwesomeIcon icon={faPlus} />
+                        <div className="flex justify-center text-gray-600 text-xl">
+                            <FontAwesomeIcon icon={faPlay} />
                         </div>
                     </div>
                 </div>
