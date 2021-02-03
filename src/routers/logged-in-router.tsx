@@ -2,6 +2,7 @@ import React from "react";
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
 import { Podcast } from "../pages/podcast";
 import {Podcasts} from '../pages/podcasts'
+import { User } from "../pages/user";
 
 const Routes = [
   {
@@ -12,6 +13,10 @@ const Routes = [
     path: "/podcasts/:id",
     component: <Podcast />
   },
+  {
+    path: '/user',
+    component: <User />
+  }
 ];
 
 

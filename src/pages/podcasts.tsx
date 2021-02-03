@@ -4,6 +4,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { Podcast } from "../components/podcast";
 import { StatusBar } from "../components/status-bar";
+import { User } from "../components/user";
 
 const ALL_PODCASTS_QUERY = gql`
     query allPodcastsQuery{
@@ -32,7 +33,8 @@ export const Podcasts = () => {
         );
     }
     return (
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col justify-center items-center bg-gray-800 pt-4">
+            <User />
             {data.getAllPodcasts.podcasts?.map((podcast) => (
                 <Podcast 
                     id={podcast.id + ""}
