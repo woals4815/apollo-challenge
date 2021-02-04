@@ -1,4 +1,4 @@
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { gql, useApolloClient, useMutation, useQuery } from '@apollo/client';
 import {myProfile} from '../__generated__/myProfile';
 import {editProfile, editProfileVariables} from "../__generated__/editProfile";
 import React from 'react';
@@ -41,7 +41,38 @@ export const User = () => {
             email: data?.me.email,
           },
       });
-    const [editProfile, {data: editData, loading: editLoading}] = useMutation<editProfile, editProfileVariables>(EDIT_PROFILE);
+      const client = useApolloClient();
+      const onCompleted = (editData: editProfile) => {
+          const {
+              editProfile: {
+                  ok
+              }
+          } = editData;
+          if(ok && data){
+              const {
+                  me: {
+                      id, email: prvEmail
+                  }
+              } = data;
+              const {email: newEmail} = getValues();
+              if (prvEmail !== newEmail){
+                  client.writeFragment({
+                      id: `User:${id}`,
+                      fragment: gql`
+                          fragment EditedUser on User {
+                              email
+                          }
+                      `,
+                      data: {
+                          email: newEmail
+                      },
+                  });
+              }
+          }   
+      };
+    const [editProfile, {data: editData, loading: editLoading}] = useMutation<editProfile, editProfileVariables>(EDIT_PROFILE, {
+        onCompleted
+    });
     const onSubmit = () => {
         const { email, password } = getValues();
         editProfile({
@@ -63,29 +94,28 @@ export const User = () => {
     return (
         <div className="bg-gray-800 w-screen h-screen flex flex-col items-center justify-center">
             <div className="flex flex-col border-white border-2 w-11/12 text-center h-1/3 justify-center items-center rounded-2xl relative">
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center">
                     <div className="text-red-200 mb-2">
-                        Email:{" "}
                         <input ref={register({
-                                pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                                pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                             })} 
                         type="email" 
                         name="email"
-                        value={data.me.email}
                         className="bg-gray-800 focus:outline-none"
                         />
-                    </div>
-                    <span className="text-red-200 mb-2">Role: {data.me.role}</span>
-                    <div className="text-red-200">
-                        Subscription:
-                        {data.me.subsriptions.map(subscript => (
-                        <span className="text-red-200"> {subscript.title}{" "} </span>
-                        ))}
+                        <input ref={register} name="password" type="password" placeholder="Password" className="bg-gray-800 focus:outline-none"/>
                     </div>
                     <div className="bg-red-200 w-14 rounded-3xl absolute bottom-4">
                         <button className="focus:outline-none">Edit</button>
                     </div>
                 </form>
+                <span className="text-red-200 mb-2">Role: {data.me.role}</span>
+                <div className="text-red-200 flex flex-col">
+                    Subscription
+                    {data.me.subsriptions.map(subscript => (
+                    <span className="text-red-200 text-xs"> {subscript.title}{" "} </span>
+                    ))}
+                </div>
             </div>
         </div>
     )

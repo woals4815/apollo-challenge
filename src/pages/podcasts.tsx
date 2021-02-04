@@ -36,7 +36,8 @@ export const Podcasts = () => {
         <div className="flex flex-col justify-center items-center bg-gray-800 pt-4">
             <User />
             {data.getAllPodcasts.podcasts?.map((podcast) => (
-                <Podcast 
+                <Podcast
+                    key={podcast.id} 
                     id={podcast.id + ""}
                     title={podcast.title}
                     category={podcast.category}

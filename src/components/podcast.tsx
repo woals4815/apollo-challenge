@@ -18,7 +18,7 @@ export const Podcast: React.FC<IPodcastProps> =({
 }) => (
         <div className='flex flex-col items-center w-screen'>
             <Link to={`/podcasts/${id}`} className='w-4/5'>
-                <div className=' flex border-2 border-blue-300 flex-col my-3 h-80 bg-gray-300 rounded-md justify'>
+                <div className=' flex border-2 border-white flex-col my-3 h-80 bg-gray-300 rounded-md justify'>
                     <div className="flex justify-between mt-2  mx-4 items-center">
                         <span className="text-red-400 text-xl lg:text-3xl">{title}</span>
                         <span className="text-xs text-gray-400 lg:text-xl">{createdAt}</span>
