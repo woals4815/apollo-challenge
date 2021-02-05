@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client';
-import { RenderResult, waitFor } from '@testing-library/react';
+import { act, RenderResult, waitFor } from '@testing-library/react';
 import { createMockClient, MockApolloClient } from 'mock-apollo-client';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -19,12 +19,11 @@ const result = {
         }
     }
 };
-
 describe('Podcasts', () => {
     let renderResult: RenderResult;
     let mockedClient: MockApolloClient;
     beforeEach(async() => {
-        await waitFor(() => {
+        await waitFor(async() => {
             mockedClient = createMockClient();
             const handler = () => Promise.resolve(result);
             mockedClient.setRequestHandler(ALL_PODCASTS_QUERY, handler);
@@ -34,9 +33,9 @@ describe('Podcasts', () => {
                         <Podcasts />
                     </ApolloProvider>
                 </Router>
-            )
-            debug();
-        })
+            );
+            await act(async() => await new Promise((resolve) => setTimeout(resolve, 0)));
+        });
     });
     it('should render ok', async() => {
         await waitFor(() => {

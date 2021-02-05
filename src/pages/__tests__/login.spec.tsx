@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client';
-import { RenderResult, waitFor } from '@testing-library/react';
+import { act, RenderResult, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMockClient, MockApolloClient } from 'mock-apollo-client';
 import React from 'react';
@@ -23,7 +23,8 @@ describe("Login", () => {
                         </ApolloProvider>
                     </Router>
                 </HelmetProvider>
-            ); 
+            );
+            await act(async() => await new Promise((resolve) => setTimeout(resolve, 0))); 
         });
     });
     it("should render OK", async () => {
