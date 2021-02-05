@@ -9,7 +9,7 @@ const result = {
     data: {
         getAllPodcasts: {
             ok: true,
-            error: 'error',
+            error: null,
             podcasts: [{
                 id: 1,
                 title: 'test',
@@ -27,19 +27,19 @@ describe('Podcasts', () => {
             mockedClient = createMockClient();
             const handler = () => Promise.resolve(result);
             mockedClient.setRequestHandler(ALL_PODCASTS_QUERY, handler);
-            const {debug} = render(
+            renderResult = render(
                 <Router>
                     <ApolloProvider client={mockedClient}>
                         <Podcasts />
                     </ApolloProvider>
                 </Router>
             );
-            await act(async() => await new Promise((resolve) => setTimeout(resolve, 0)));
         });
+        await act(async() => await new Promise((resolve) => setTimeout(resolve, 0)));
     });
     it('should render ok', async() => {
         await waitFor(() => {
-            expect(document.title).toBe('');
+            expect(document.title).toBe('Home | Podcast');
         })
     });
 })

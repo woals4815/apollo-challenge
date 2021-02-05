@@ -37,15 +37,15 @@ describe("Podcast", () => {
     let mockedClient: MockApolloClient;
     beforeEach(async () => {
       await waitFor(() => {
-      mockedClient = createMockClient();
-      const handler = () => Promise.resolve(Result);
-      mockedClient.setRequestHandler(GET_EPISODES, handler);
-      //mockedClient.setRequestHandler(SUBSCRIPTION, handler);
-      renderResult = render(
-        <ApolloProvider client={mockedClient}>
-          <Podcast />
-        </ApolloProvider>
-      );
+        mockedClient = createMockClient();
+        const handler = () => Promise.resolve(Result);
+        mockedClient.setRequestHandler(GET_EPISODES, handler);
+        //mockedClient.setRequestHandler(SUBSCRIPTION, handler);
+        renderResult = render(
+          <ApolloProvider client={mockedClient}>
+            <Podcast />
+          </ApolloProvider>
+        );
       })
       await act(async() => await new Promise((resolve) => setTimeout(resolve, 0)));
     });

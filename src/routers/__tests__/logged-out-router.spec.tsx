@@ -19,7 +19,6 @@ describe('LoggedOutRouter', () => {
                 <LoggedOutRouter />
             </ApolloProvider>
         );
-        debug();
         await act(async() => await new Promise((resolve) => setTimeout(resolve, 0)));
     });
 })

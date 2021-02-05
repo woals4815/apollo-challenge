@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Podcast } from "../components/podcast";
 import { StatusBar } from "../components/status-bar";
 import { User } from "../components/user";
+import { Helmet } from "react-helmet-async";
 
 export const ALL_PODCASTS_QUERY = gql`
     query allPodcastsQuery{
@@ -22,7 +23,6 @@ export const ALL_PODCASTS_QUERY = gql`
 `;
 
 
-
 export const Podcasts = () => {
     const { data, loading, error} = useQuery<allPodcastsQuery>(ALL_PODCASTS_QUERY)
     if(!data || loading || error) {
@@ -34,6 +34,9 @@ export const Podcasts = () => {
     }
     return (
         <div className="flex flex-col justify-center items-center bg-gray-800 pt-4">
+            <Helmet>
+                <title>Home | Podcast</title>
+            </Helmet>
             {/*<User />*/}
             {data.getAllPodcasts.podcasts?.map((podcast) => (
                 <Podcast
