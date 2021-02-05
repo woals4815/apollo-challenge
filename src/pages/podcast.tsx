@@ -1,5 +1,5 @@
 import { gql, useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import React, { useState } from 'react';
+import React from 'react';
 import {getPodcast, getPodcastVariables} from '../__generated__/getPodcast';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,12 +7,13 @@ import { faCheck, faPlay, faPlus, faSubscript } from '@fortawesome/free-solid-sv
 import { StatusBar } from '../components/status-bar';
 import {subscribe, subscribeVariables} from '../__generated__/subscribe';
 import {subscripiton} from '../__generated__/subscripiton';
+import { Helmet } from 'react-helmet-async';
 
 interface IPodcastParams {
     id: string;
 }
 
-const GET_EPISODES = gql`
+export const GET_EPISODES = gql`
     query getPodcast($input: PodcastSearchInput!){
         getPodcast(input: $input){
             ok
@@ -32,8 +33,8 @@ const GET_EPISODES = gql`
         }
     }
 `
-
-const SUBSCRIBE = gql`
+/*
+export const SUBSCRIBE = gql`
     mutation subscribe($input: ToggleSubscribeInput!){
         toggleSubscribe(input: $input){
             ok
@@ -41,7 +42,7 @@ const SUBSCRIBE = gql`
         }
     }
 `;
-const SUBSCRIPTION = gql`
+export const SUBSCRIPTION = gql`
     query subscripiton{
         subscriptions{
             id
@@ -49,8 +50,8 @@ const SUBSCRIPTION = gql`
         }
     }
 `;
+*/
 export const Podcast = () => {
-    let subData;
     const params = useParams<IPodcastParams>();
     const {data, loading, error} = useQuery<getPodcast, getPodcastVariables>(GET_EPISODES, {
         variables: {
@@ -59,7 +60,7 @@ export const Podcast = () => {
             }
         }
     });
-    const [isSubscribe, setSubcribe] = useState(false);
+    /*
     const [subscribe, {data: subscribeData, loading: subscribeLoading}] = useMutation<subscribe, subscribeVariables>(SUBSCRIBE, {
         variables: {
             input: {
@@ -77,8 +78,9 @@ export const Podcast = () => {
             }
         });
         const result = await refetch();
-        console.log(result);
     };
+    */
+    
     if(!data || loading || error) {
         return (
             <div className="h-screen flex justify-center items-center">
@@ -88,15 +90,19 @@ export const Podcast = () => {
     }
     return (
             <div className="flex flex-col justify-center items-center">
+                <Helmet>
+                    <title>{data.getPodcast.podcast?.title} | Podcast</title>
+                </Helmet>
+                
                 <div className=" bg-gray-800 w-1/2 h-16 fixed rounded-lg top-0 flex justify-between items-center">
-                    <span className="text-white ml-20 text-xl">{data?.getPodcast.podcast?.title}</span>
+                    {/*<span className="text-white ml-20 text-xl">{data?.getPodcast.podcast?.title}</span>
                     <button className=" focus:outline-none" onClick={onClicked}>    
                         <span className={`text-white mr-4 ${subscriptionData?.subscriptions.find(item => item.id === +params.id)? "hidden" : ""}`}><FontAwesomeIcon icon={faPlus} /></span>
                         <span className={`text-white mr-4 ${subscriptionData?.subscriptions.find(subscription => subscription.id === +params.id)? "" : "hidden"}`}><FontAwesomeIcon icon={faCheck} /></span>
-                    </button>
+    </button>*/}                    
                 </div>
                 {data?.getPodcast.podcast?.episodes.map(episode => (
-                    <div className='w-screen flex flex-col items-center justify-center mt-12'>
+                    <div className='w-screen flex flex-col items-center justify-center mt-12' key={episode.id}>
                         <div className=' lg:max-w-screen-2xl w-4/5 bg-blue-300 flex flex-col my-3 h-80 rounded-md'>
                             <div className="flex justify-between mt-2  mx-4">
                                 <span className="text-red-400 text-xl lg:text-7xl">{episode.title}</span>
@@ -109,7 +115,7 @@ export const Podcast = () => {
                         </div>
                     </div>
                 ))}
-            <StatusBar />
-        </div>
+                <StatusBar />
+            </div>
     )
 }

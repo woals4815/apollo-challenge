@@ -6,7 +6,7 @@ import { Podcast } from "../components/podcast";
 import { StatusBar } from "../components/status-bar";
 import { User } from "../components/user";
 
-const ALL_PODCASTS_QUERY = gql`
+export const ALL_PODCASTS_QUERY = gql`
     query allPodcastsQuery{
         getAllPodcasts{
             ok
@@ -34,7 +34,7 @@ export const Podcasts = () => {
     }
     return (
         <div className="flex flex-col justify-center items-center bg-gray-800 pt-4">
-            <User />
+            {/*<User />*/}
             {data.getAllPodcasts.podcasts?.map((podcast) => (
                 <Podcast
                     key={podcast.id} 

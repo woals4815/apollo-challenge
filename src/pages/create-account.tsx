@@ -6,7 +6,9 @@ import {createAccountMutation, createAccountMutationVariables} from '../__genera
 import { Link, useHistory } from "react-router-dom";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
-const CREATE_ACCOUNT_MUTATION = gql`
+import { Helmet } from "react-helmet-async";
+
+export const CREATE_ACCOUNT_MUTATION = gql`
   mutation createAccountMutation($createAccountInput: CreateAccountInput!){
     createAccount(input: $createAccountInput){
       ok
@@ -57,6 +59,9 @@ export const CreateAccount = () => {
   };
   return (
   <div className="h-screen flex items-center mx-3 flex-col mt-10 lg:mt-28">
+    <Helmet>
+      <title>Create Account | Podcast</title>
+    </Helmet>
     <div className=" w-full max-w-screen-sm flex flex-col items-center">
       <form
         onSubmit = {handleSubmit(onSubmit)}

@@ -1,4 +1,4 @@
-import { gql, useApolloClient, useMutation, useQuery } from '@apollo/client';
+/*import { gql, useApolloClient, useMutation, useQuery } from '@apollo/client';
 import {myProfile} from '../__generated__/myProfile';
 import {editProfile, editProfileVariables} from "../__generated__/editProfile";
 import React from 'react';
@@ -34,46 +34,51 @@ interface IEditForm {
 }
 
 export const User = () => {
-    const {data, loading, error} = useQuery<myProfile>(USER);
-    const { register, getValues, watch, errors, handleSubmit, formState } = useForm<IEditForm>({
+    const {data, loading, error ,refetch} = useQuery<myProfile>(USER);
+    const { register, getValues, errors, handleSubmit, formState } = useForm<IEditForm>({
         mode: 'onChange',
         defaultValues: {
             email: data?.me.email,
           },
-      });
-      const client = useApolloClient();
-      const onCompleted = (editData: editProfile) => {
-          const {
-              editProfile: {
-                  ok
-              }
-          } = editData;
-          if(ok && data){
-              const {
-                  me: {
-                      id, email: prvEmail
-                  }
-              } = data;
-              const {email: newEmail} = getValues();
-              if (prvEmail !== newEmail){
-                  client.writeFragment({
-                      id: `User:${id}`,
-                      fragment: gql`
-                          fragment EditedUser on User {
-                              email
-                          }
-                      `,
-                      data: {
-                          email: newEmail
-                      },
-                  });
-              }
-          }   
-      };
+    });
+    const client = useApolloClient();
+    const onCompleted = (editData: editProfile) => {
+        console.log(editData?.editProfile.ok);
+        const {
+            editProfile: {
+                ok
+            }
+        } = editData;
+        if(ok && data){
+            const {
+                me: {
+                    id, email: prvEmail
+                }
+            } = data;
+            console.log('On Completeddddddd')
+            const {email: newEmail} = getValues();
+            console.log('here 1')
+            if (prvEmail !== newEmail){
+                console.log('here 2')
+                client.writeFragment({
+                    id: `User:${id}`,
+                    fragment: gql`
+                        fragment EditedUser on User {
+                            email
+                        }
+                    `,
+                    data: {
+                        email: newEmail
+                    },
+                });
+                console.log('done!!!!')
+            }
+        }   
+    };
     const [editProfile, {data: editData, loading: editLoading}] = useMutation<editProfile, editProfileVariables>(EDIT_PROFILE, {
         onCompleted
     });
-    const onSubmit = () => {
+    const onSubmit =() => {
         const { email, password } = getValues();
         editProfile({
             variables: {
@@ -93,9 +98,9 @@ export const User = () => {
     }  
     return (
         <div className="bg-gray-800 w-screen h-screen flex flex-col items-center justify-center">
-            <div className="flex flex-col border-white border-2 w-11/12 text-center h-1/3 justify-center items-center rounded-2xl relative">
+            <div className="flex flex-col border-white border-2 w-11/12 text-center h-1/3 justify-center items-start rounded-2xl relative">
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center">
-                    <div className="text-red-200 mb-2">
+                    <div className="text-red-200 mb-2 flex flex-col">
                         <input ref={register({
                                 pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                             })} 
@@ -105,18 +110,13 @@ export const User = () => {
                         />
                         <input ref={register} name="password" type="password" placeholder="Password" className="bg-gray-800 focus:outline-none"/>
                     </div>
-                    <div className="bg-red-200 w-14 rounded-3xl absolute bottom-4">
+                    <div className={`${!editLoading? "bg-red-200": "bg-gray-300 pointer-events-none"} w-14 rounded-3xl absolute bottom-4`}>
                         <button className="focus:outline-none">Edit</button>
                     </div>
                 </form>
                 <span className="text-red-200 mb-2">Role: {data.me.role}</span>
-                <div className="text-red-200 flex flex-col">
-                    Subscription
-                    {data.me.subsriptions.map(subscript => (
-                    <span className="text-red-200 text-xs"> {subscript.title}{" "} </span>
-                    ))}
-                </div>
             </div>
         </div>
     )
 }
+*/
