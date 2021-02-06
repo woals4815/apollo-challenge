@@ -92,12 +92,12 @@ export const Podcast = () => {
                 </Helmet>
                 <div className=" bg-red-200 w-1/2 h-16 fixed rounded-lg top-2 flex justify-between items-center">
                     <span className="text-white ml-20 text-xl">{data?.getPodcast.podcast?.title}</span>
-                    <button className=" focus:outline-none" onClick={onClicked}>    
-                        <span className={subscribeLoading? "hidden": `text-white mr-4 ${subscriptionData?.subscriptions.find(item => item.id === +params.id)? "hidden" : ""}`}>
+                    <button className={subscribeLoading? "focus:outline-none pointer-events-none": "focus:outline-none"} onClick={onClicked}>    
+                        <span className={subscribeLoading? "hidden": `${subscriptionData?.subscriptions.find(item => item.id === +params.id)? "hidden" : "text-white mr-4 "}`}>
                             <FontAwesomeIcon icon={faPlus}/>
                         </span>
                         <div className= {subscribeLoading? `border-t-2 border-b-2 rounded-full border-red-600 h-4 w-4 animate-spin mr-4` : "hidden"}></div>
-                        <span className={subscribeLoading? "hidden": `text-white mr-4 ${subscriptionData?.subscriptions.find(subscription => subscription.id === +params.id)? "" : "hidden"}`}>
+                        <span className={subscribeLoading? "hidden": ` ${subscriptionData?.subscriptions.find(subscription => subscription.id === +params.id)? "text-white mr-4" : "hidden"}`}>
                             <FontAwesomeIcon icon={faCheck} />
                         </span>
                     </button>                  

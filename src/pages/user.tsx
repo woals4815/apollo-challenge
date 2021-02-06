@@ -3,6 +3,7 @@ import {myProfile} from '../__generated__/myProfile';
 import {editProfile, editProfileVariables} from "../__generated__/editProfile";
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { Helmet } from 'react-helmet-async';
 
 const USER = gql`
     query myProfile{
@@ -52,11 +53,8 @@ export const User = () => {
                     id, email: prvEmail
                 }
             } = data;
-            console.log('On Completeddddddd')
             const {email: newEmail} = getValues();
-            console.log('here 1')
             if (prvEmail !== newEmail){
-                console.log('here 2')
                 client.writeFragment({
                     id: `User:${id}`,
                     fragment: gql`
@@ -68,8 +66,11 @@ export const User = () => {
                         email: newEmail
                     },
                 });
-                console.log('done!!!!')
+                alert('Edit profile complete!');
+            }else{
+                alert('Please write new things.');
             }
+            
         }  
     };
     const [editProfile, {data: editData, loading: editLoading}] = useMutation<editProfile, editProfileVariables>(EDIT_PROFILE, {
@@ -95,6 +96,9 @@ export const User = () => {
     }
     return (
         <div className="bg-gray-800 w-screen h-screen flex flex-col items-center">
+            <Helmet>
+                <title>My Profile | Podcast</title>
+            </Helmet>
             <div className="py-16 mt-20">
                 <span className="text-5xl text-white">My Profile</span>
             </div>

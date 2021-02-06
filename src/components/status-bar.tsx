@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 export const StatusBar = () => {
     return (
-        <div className=" w-5/6 flex fixed z-50 bottom-0 justify-evenly bg-yellow-900 h-12 items-center rounded-md">
+        <div className=" w-4/6 flex fixed z-50 bottom-0 justify-evenly bg-yellow-900 h-12 items-center rounded-md">
             <div className=" text-3xl">
                 <Link to="/">
                     <FontAwesomeIcon icon={faHome} />

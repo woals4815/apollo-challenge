@@ -16,16 +16,18 @@ export const Podcast: React.FC<IPodcastProps> =({
     category,
     createdAt
 }) => (
-        <div className='flex flex-col items-center w-screen'>
-            <Link to={`/podcasts/${id}`} className='w-4/5'>
-                <div className=' flex border-2 border-white flex-col my-3 h-80 bg-gray-300 rounded-md justify'>
-                    <div className="flex justify-between mt-2  mx-4 items-center">
-                        <span className="text-red-400 text-xl lg:text-3xl">{title}</span>
-                        <span className="text-xs text-gray-400 lg:text-xl">{createdAt}</span>
+        <div className='flex flex-col items-center w-screen mb-6'>
+            <Link to={`/podcasts/${id}`} className='w-80 h-80 rounded-full'>
+                <div className=' w-80 bg-gradient-to-r from-green-400 to-blue-500 flex flex-col my-3 h-80 rounded-full items-center justify-center relative'>
+                    <div className=" justify-between mt-2  mx-4 items-center absolute top-16 flex flex-col">
+                        <span className="text-red-400 text-xl">{title}</span>
                     </div>
-                    <div className="text-xs  mx-4 text-red-400 lg:text-2xl">{category}</div>
-                    <div className=" text-6xl flex mt-20 lg:mt-16 justify-center text-red-400 items-center">
+                    <div className="text-sm  mx-4 text-red-400 absolute top-12">{category}</div>
+                    <div className=" text-6xl flex pl-4 text-red-400">
                         <FontAwesomeIcon icon={faPlay} />
+                    </div>
+                    <div>
+                        <span className="text-xs text-black absolute bottom-16 left-24">{createdAt}</span>
                     </div>
                 </div>
             </Link>
