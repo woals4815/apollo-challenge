@@ -37,7 +37,7 @@ export const Podcasts = () => {
             <Helmet>
                 <title>Home | Podcast</title>
             </Helmet>
-            {/*<User />*/}
+            <User />
             {data.getAllPodcasts.podcasts?.map((podcast) => (
                 <Podcast
                     key={podcast.id} 

@@ -33,7 +33,6 @@ export const GET_EPISODES = gql`
         }
     }
 `
-/*
 export const SUBSCRIBE = gql`
     mutation subscribe($input: ToggleSubscribeInput!){
         toggleSubscribe(input: $input){
@@ -50,7 +49,7 @@ export const SUBSCRIPTION = gql`
         }
     }
 `;
-*/
+
 export const Podcast = () => {
     const params = useParams<IPodcastParams>();
     const {data, loading, error} = useQuery<getPodcast, getPodcastVariables>(GET_EPISODES, {
@@ -60,7 +59,6 @@ export const Podcast = () => {
             }
         }
     });
-    /*
     const [subscribe, {data: subscribeData, loading: subscribeLoading}] = useMutation<subscribe, subscribeVariables>(SUBSCRIBE, {
         variables: {
             input: {
@@ -79,7 +77,6 @@ export const Podcast = () => {
         });
         const result = await refetch();
     };
-    */
     
     if(!data || loading || error) {
         return (
@@ -93,28 +90,34 @@ export const Podcast = () => {
                 <Helmet>
                     <title>{data.getPodcast.podcast?.title} | Podcast</title>
                 </Helmet>
-                
-                <div className=" bg-gray-800 w-1/2 h-16 fixed rounded-lg top-0 flex justify-between items-center">
-                    {/*<span className="text-white ml-20 text-xl">{data?.getPodcast.podcast?.title}</span>
+                <div className=" bg-red-200 w-1/2 h-16 fixed rounded-lg top-2 flex justify-between items-center">
+                    <span className="text-white ml-20 text-xl">{data?.getPodcast.podcast?.title}</span>
                     <button className=" focus:outline-none" onClick={onClicked}>    
-                        <span className={`text-white mr-4 ${subscriptionData?.subscriptions.find(item => item.id === +params.id)? "hidden" : ""}`}><FontAwesomeIcon icon={faPlus} /></span>
-                        <span className={`text-white mr-4 ${subscriptionData?.subscriptions.find(subscription => subscription.id === +params.id)? "" : "hidden"}`}><FontAwesomeIcon icon={faCheck} /></span>
-    </button>*/}                    
+                        <span className={subscribeLoading? "hidden": `text-white mr-4 ${subscriptionData?.subscriptions.find(item => item.id === +params.id)? "hidden" : ""}`}>
+                            <FontAwesomeIcon icon={faPlus}/>
+                        </span>
+                        <div className= {subscribeLoading? `border-t-2 border-b-2 rounded-full border-red-600 h-4 w-4 animate-spin mr-4` : "hidden"}></div>
+                        <span className={subscribeLoading? "hidden": `text-white mr-4 ${subscriptionData?.subscriptions.find(subscription => subscription.id === +params.id)? "" : "hidden"}`}>
+                            <FontAwesomeIcon icon={faCheck} />
+                        </span>
+                    </button>                  
                 </div>
-                {data?.getPodcast.podcast?.episodes.map(episode => (
-                    <div className='w-screen flex flex-col items-center justify-center mt-12' key={episode.id}>
-                        <div className=' lg:max-w-screen-2xl w-4/5 bg-blue-300 flex flex-col my-3 h-80 rounded-md'>
-                            <div className="flex justify-between mt-2  mx-4">
-                                <span className="text-red-400 text-xl lg:text-7xl">{episode.title}</span>
-                                <span className="text-xs text-gray-400 lg:text-xl">{episode.createdAt}</span>
-                            </div>
-                            <div className="text-xs  mx-4 text-red-400 lg:text-2xl">{episode.category}</div>
-                            <div className="flex justify-center items-center text-gray-600 text-xl">
-                                <FontAwesomeIcon icon={faPlay} />
+                <div className="bg-gray-800 w-screen h-screen">
+                    {data?.getPodcast.podcast?.episodes.map(episode => (
+                        <div className='w-screen flex flex-col items-center justify-center mt-12' key={episode.id}>
+                            <div className=' w-80 bg-gradient-to-r from-green-400 to-blue-500 flex flex-col my-3 h-80 rounded-full items-center justify-center relative'>
+                                <div className="absolute top-16 flex flex-col">
+                                    <span className="text-red-400 text-3xl">{episode.title}</span>
+                                    <div className="text-xs mx-4 text-red-400 text-center">{episode.category}</div>
+                                </div>
+                                <div className="flex flex-col justify-center items-center text-yellow-900 text-5xl mt-12">
+                                    <FontAwesomeIcon icon={faPlay} />
+                                    <span className="text-xs pt-7">{episode.createdAt}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
                 <StatusBar />
             </div>
     )
